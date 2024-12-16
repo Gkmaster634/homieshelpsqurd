@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Create Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 300px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 15px;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginPage">
+        <h2>Login</h2>
+        <form id="loginForm" onsubmit="validateLogin(event)">
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+
+            <button type="submit">Login</button>
+            <p id="loginError" class="error" style="display: none;">Wrong email or password. Please try again.</p>
+        </form>
+    </div>
+
+    <div id="employeePage" style="display: none;">
+        <h2>Welcome Gulshan Kumar</h2>
+        <p>You are authorized to create accounts for students and employees.</p>
+        <form id="createAccountForm" onsubmit="createAccount(event)">
+            <label for="role">For whom:</label>
+            <select id="role" required>
+                <option value="student">Student</option>
+                <option value="employee">Employee</option>
+            </select>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+
+            <label for="emailCreate">Email:</label>
+            <input type="email" id="emailCreate" required>
+
+            <label for="passwordCreate">Password:</label>
+            <input type="password" id="passwordCreate" required>
+
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" required>
+
+            <button type="submit">Create Account</button>
+        </form>
+    </div>
+
+    <div id="studentPage" style="display: none;">
+        <h2>Welcome Student</h2>
+        <p>You have successfully logged in as a student.</p>
+    </div>
+
+    <script>
+        const users = [
+            { role: 'employee', name: 'Gulshan Kumar', email: 'gk7114245@gmail.com', password: 'gk@17' }
+        ];
+
+        function validateLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const user = users.find(user => user.email === email && user.password === password);
+
+            if (!user) {
+                document.getElementById('loginError').style.display = 'block';
+            } else {
+                document.getElementById('loginError').style.display = 'none';
+                if (user.role === 'student') {
+                    showStudentPage();
+                } else if (user.role === 'employee') {
+                    showEmployeePage();
+                }
+            }
+        }
+
+        function createAccount(event) {
+            event.preventDefault();
+            const role = document.getElementById('role').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('emailCreate').value;
+            const password = document.getElementById('passwordCreate').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            users.push({ role, name, email, password });
+            alert(`${role} account created successfully for ${name}!`);
+            document.getElementById('createAccountForm').reset();
+        }
+
+        function showEmployeePage() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('employeePage').style.display = 'block';
+        }
+
+        function showStudentPage() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('studentPage').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+
